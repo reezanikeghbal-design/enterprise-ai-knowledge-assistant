@@ -1,0 +1,38 @@
+services:
+  backend:
+    build: .
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8000
+    environment:
+      DATA_DIR: /app/data
+      UPLOAD_DIR: /app/data/uploads
+      CHROMA_DIR: /app/data/chroma
+      CONVERSATION_FILE: /app/data/conversations.json
+      OLLAMA_BASE_URL: http://ollama:11434
+      OLLAMA_MODEL: llama3.2:3b
+    volumes:
+      - app_data:/app/data
+    ports:
+      - "8000:8000"
+    depends_on:
+      - ollama
+
+  ollama:
+    image: ollama/ollama:latest
+    volumes:
+      - ollama_models:/root/.ollama
+    ports:
+      - "11434:11434"
+
+  frontend:
+    build: .
+    command: streamlit run frontend/streamlit_app.py --server.address 0.0.0.0 --server.port 8501
+    environment:
+      API_URL: http://backend:8000
+    ports:
+      - "8501:8501"
+    depends_on:
+      - backend
+
+volumes:
+  app_data:
+  ollama_models:

@@ -1,0 +1,12 @@
+[
+  {
+    "question": "What is the standard refund window?",
+    "expected_sources": ["company_policy.txt"],
+    "expected_answer_terms": ["30 days"]
+  },
+  {
+    "question": "How should an employee request remote work?",
+    "expected_sources": ["employee_handbook.txt"],
+    "expected_answer_terms": ["manager"]
+  }
+]
