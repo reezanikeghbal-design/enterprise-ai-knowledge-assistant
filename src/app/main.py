@@ -1,10 +1,11 @@
 from pathlib import Path
 
-from fastapi import FastAPI
+from fastapi import Depends, FastAPI
 
 from app.api.routes import documents, chat, search, conversations, evaluation
 from app.core.config import get_settings
 from app.core.logging import configure_logging
+from app.core.security import require_api_key
 from app.evaluation.evaluator import Evaluator
 from app.services.conversation_service import ConversationService
 from app.services.document_service import DocumentService
@@ -30,12 +31,13 @@ evaluator = Evaluator(
 )
 
 app = FastAPI(title=settings.app_name, version="1.0.0")
+protected = [Depends(require_api_key)]
 
-app.include_router(documents.configure(document_service))
-app.include_router(chat.configure(rag_service, conversation_service))
-app.include_router(search.configure(retrieval_service))
-app.include_router(conversations.configure(conversation_service))
-app.include_router(evaluation.configure(evaluator))
+app.include_router(documents.configure(document_service), dependencies=protected)
+app.include_router(chat.configure(rag_service, conversation_service), dependencies=protected)
+app.include_router(search.configure(retrieval_service), dependencies=protected)
+app.include_router(conversations.configure(conversation_service), dependencies=protected)
+app.include_router(evaluation.configure(evaluator), dependencies=protected)
 
 
 @app.get("/health", tags=["system"])
