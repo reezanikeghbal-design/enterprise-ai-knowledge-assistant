@@ -293,4 +293,4 @@ Suggestions, issues, and contributions are welcome. Please open an issue to disc
 
 ## License
 
-No license is currently specified. If you intend this project to be reused or distributed by others, consider adding an appropriate open-source license.
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
