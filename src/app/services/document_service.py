@@ -4,7 +4,6 @@ import csv
 import io
 import logging
 from pathlib import Path
-from typing import BinaryIO
 
 import fitz
 from docx import Document
@@ -82,10 +81,7 @@ class DocumentService:
 
         document_id = file_hash[:16]
         destination = Path(self.settings.upload_dir) / f"{document_id}_{filename}"
-        destination.write_bytes(data)
-
         texts = [c["text"] for c in all_chunks]
-        vectors = self.embeddings.embed(texts)
         metadata = [
             {
                 "document_id": document_id,
@@ -98,7 +94,25 @@ class DocumentService:
             for c in all_chunks
         ]
         ids = [f"{document_id}-{i}" for i in range(len(all_chunks))]
-        self.vector_store.add(ids, texts, vectors, metadata)
+        vector_write_started = False
+
+        try:
+            destination.write_bytes(data)
+            vectors = self.embeddings.embed(texts)
+            vector_write_started = True
+            self.vector_store.add(ids, texts, vectors, metadata)
+        except Exception:
+            if vector_write_started:
+                try:
+                    self.vector_store.delete_document(document_id)
+                except Exception:
+                    logger.exception("Failed to roll back vector data for document %s", document_id)
+            try:
+                destination.unlink(missing_ok=True)
+            except OSError:
+                logger.exception("Failed to remove incomplete upload %s", destination)
+            raise
+
         return {
             "document_id": document_id,
             "document_name": filename,
