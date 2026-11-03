@@ -1,6 +1,13 @@
 # Enterprise AI Knowledge Assistant
 
+![CI](https://github.com/reezanikeghbal-design/enterprise-ai-knowledge-assistant/actions/workflows/ci.yml/badge.svg)
+![Python](https://img.shields.io/badge/python-3.11+-blue.svg)
+![FastAPI](https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white)
+![Docker](https://img.shields.io/badge/docker-compose-2496ED?logo=docker&logoColor=white)
+
 A lightweight modular-monolith enterprise knowledge assistant built with FastAPI, Ollama, Sentence Transformers, ChromaDB, PyMuPDF, python-docx, pandas, and Streamlit.
+
+Upload PDF, DOCX, TXT, or CSV files, ask questions in natural language, and get answers grounded in your documents with source citations. Everything runs locally with Ollama, so documents never leave your environment.
 
 ## Features
 
@@ -72,11 +79,22 @@ enterprise-ai-knowledge-assistant/
 
 Python 3.11+ is recommended.
 
+**Linux / macOS**
+
 ```bash
 python -m venv .venv
 source .venv/bin/activate
 pip install -r requirements.txt
 cp .env.example .env
+```
+
+**Windows (PowerShell)**
+
+```powershell
+python -m venv .venv
+.venv\Scripts\Activate.ps1
+pip install -r requirements.txt
+copy .env.example .env
 ```
 
 Start Ollama locally and pull the configured model:
