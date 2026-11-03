@@ -3,6 +3,8 @@ import requests
 import streamlit as st
 
 API_URL = os.getenv("API_URL", "http://localhost:8000")
+API_KEY = os.getenv("API_KEY", "")
+API_HEADERS = {"X-API-Key": API_KEY} if API_KEY else {}
 
 st.set_page_config(page_title="Enterprise AI Knowledge Assistant", layout="wide")
 st.title("Enterprise AI Knowledge Assistant")
@@ -18,13 +20,14 @@ with st.sidebar:
             r = requests.post(
                 f"{API_URL}/documents/upload",
                 files={"file": (uploaded.name, uploaded.getvalue(), uploaded.type)},
+                headers=API_HEADERS,
                 timeout=180,
             )
         st.write(r.json())
 
     st.subheader("Uploaded documents")
     try:
-        docs = requests.get(f"{API_URL}/documents", timeout=10).json()
+        docs = requests.get(f"{API_URL}/documents", headers=API_HEADERS, timeout=10).json()
         for doc in docs:
             st.caption(f"{doc['document_name']} — {doc['chunks']} chunks")
     except Exception:
@@ -46,6 +49,7 @@ if question:
                 "question": question,
                 "conversation_id": st.session_state.conversation_id,
             },
+            headers=API_HEADERS,
             timeout=180,
         )
     if response.ok:
@@ -65,7 +69,12 @@ with st.form("search_form"):
     query = st.text_input("Search")
     submitted = st.form_submit_button("Search")
 if submitted and query:
-    response = requests.post(f"{API_URL}/search", json={"query": query}, timeout=60)
+    response = requests.post(
+        f"{API_URL}/search",
+        json={"query": query},
+        headers=API_HEADERS,
+        timeout=60,
+    )
     if response.ok:
         for item in response.json():
             st.markdown(f"**{item['document_name']}** — score {item['score']}")
