@@ -122,6 +122,14 @@ pip install -r requirements.txt
 cp .env.example .env
 ```
 
+Set a strong, private API key in `.env` before starting the backend:
+
+```bash
+python -c "import secrets; print(secrets.token_urlsafe(32))"
+```
+
+Copy the generated value into `API_KEY` in `.env`. Do not commit your `.env` file or share this secret.
+
 **Windows (PowerShell)**
 
 ```powershell
@@ -130,6 +138,8 @@ python -m venv .venv
 pip install -r requirements.txt
 copy .env.example .env
 ```
+
+Generate a strong API key (for example, with Python's `secrets.token_urlsafe(32)`) and set it as `API_KEY` in `.env`. Keep this secret private and do not commit `.env`.
 
 ### 3. Pull the Ollama model
 
@@ -171,7 +181,7 @@ Pull the model from the Ollama container:
 docker compose exec ollama ollama pull llama3.2:3b
 ```
 
-By default, the frontend is exposed on port `8501` and the API on port `8000`.
+By default, the frontend is exposed on port `8501` and the API on port `8000`. Set `API_KEY` in your local `.env` file before running Compose; both backend and frontend receive the same key. Compose intentionally refuses to start if `API_KEY` is missing.
 
 **Note:** Model weights are intentionally not downloaded during image builds. Pull the required model after the Ollama service is running.
 
@@ -189,10 +199,11 @@ Application settings are documented in `.env.example`. Key options include:
 | `OLLAMA_BASE_URL` | Ollama service endpoint |
 | `OLLAMA_MODEL` | Model used for answer generation |
 | `MAX_UPLOAD_SIZE_MB` | Maximum accepted upload size |
+| `API_KEY` | Shared secret required by operational API endpoints |
 
 ## API Reference
 
-The application currently exposes the following endpoints:
+The application currently exposes the following endpoints. All operational endpoints require the `X-API-Key` request header. `/health` remains public for health checks. If `API_KEY` is unset, protected endpoints fail closed with HTTP `503`.
 
 | Method | Endpoint | Purpose |
 |---|---|---|
@@ -252,7 +263,7 @@ This repository is a practical engineering project and intentionally keeps sever
 - Conversation history uses local JSON persistence; it is not designed as a multi-user production database.
 - ChromaDB is used as local persistent vector storage rather than a distributed vector database.
 - The default answer-quality evaluator uses heuristics rather than an LLM-as-a-judge approach.
-- Authentication and authorization are outside the current project scope.
+- API access currently uses one shared API key; per-user identity, role-based authorization, and tenant isolation are not implemented. Use HTTPS when exposing the API beyond a trusted local environment, and rotate the shared key if it is disclosed.
 - OCR is not included for image-only PDF documents.
 
 These trade-offs keep the project approachable to run locally while making areas for further engineering work explicit.
