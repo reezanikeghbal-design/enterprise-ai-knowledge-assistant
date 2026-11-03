@@ -219,18 +219,24 @@ The application currently exposes the following endpoints. All operational endpo
 
 ### Search Example
 
+Set `API_KEY` in your terminal to the same value configured in `.env`, then include it in protected API requests:
+
 ```bash
+export API_KEY="your-configured-api-key"
+
 curl -X POST http://localhost:8000/search \
+  -H "X-API-Key: $API_KEY" \
   -H "Content-Type: application/json" \
   -d '{"query":"What is the refund policy?","top_k":5}'
 ```
 
 ## Evaluation
 
-A manually prepared evaluation dataset is provided at `evaluation/dataset.json`. Run the evaluation through the API:
+A manually prepared evaluation dataset is provided at `evaluation/dataset.json`. Run the evaluation through the API (using the `API_KEY` environment variable set above):
 
 ```bash
-curl -X POST http://localhost:8000/evaluation/run
+curl -X POST http://localhost:8000/evaluation/run \
+  -H "X-API-Key: $API_KEY"
 ```
 
 The evaluator reports computed metrics; benchmark values are not hardcoded.
