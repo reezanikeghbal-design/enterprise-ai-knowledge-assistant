@@ -11,19 +11,19 @@ Users can upload PDF, DOCX, TXT, and CSV files, ask natural-language questions, 
 
 ## Interface Preview
 
-The following illustrative UI mockups communicate the intended user experience and key workflows. They are design previews, not screenshots captured from a running application.
+Explore the platform's main workspace, document management, and grounded question-answering experience.
 
 ### Workspace overview
 
-![Illustrative workspace overview](docs/images/knowledge-assistant-overview.svg)
+![workspace overview](docs/images/knowledge-assistant-overview.svg)
 
 ### Grounded answers and source attribution
 
-![Illustrative grounded answer interface](docs/images/knowledge-assistant-chat.svg)
+![grounded answer interface](docs/images/knowledge-assistant-chat.svg)
 
 ### Document library
 
-![Illustrative document management interface](docs/images/knowledge-assistant-documents.svg)
+![document management interface](docs/images/knowledge-assistant-documents.svg)
 
 ## Key Features
 
