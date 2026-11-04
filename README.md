@@ -9,6 +9,22 @@ A local-first, modular-monolith knowledge assistant that enables users to query 
 
 Users can upload PDF, DOCX, TXT, and CSV files, ask natural-language questions, and receive answers grounded in the indexed content. The application runs with a locally hosted Ollama model, keeping document processing and inference within the local environment.
 
+## Interface Preview
+
+The following illustrative UI mockups communicate the intended user experience and key workflows. They are design previews, not screenshots captured from a running application.
+
+### Workspace overview
+
+![Illustrative workspace overview](docs/images/knowledge-assistant-overview.svg)
+
+### Grounded answers and source attribution
+
+![Illustrative grounded answer interface](docs/images/knowledge-assistant-chat.svg)
+
+### Document library
+
+![Illustrative document management interface](docs/images/knowledge-assistant-documents.svg)
+
 ## Key Features
 
 - **Multi-format ingestion:** Supports PDF, DOCX, TXT, and CSV documents.
